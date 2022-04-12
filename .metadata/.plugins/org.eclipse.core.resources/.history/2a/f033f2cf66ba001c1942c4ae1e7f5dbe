@@ -17,15 +17,12 @@ import java.awt.Font;
 public class M32052 extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField edtPlain;
+	private JTextField edtStr;
 	private JTextField edtKey;
 	
 	public M32052() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 710, 520);
-		setLocationRelativeTo(null);
-		setResizable(false);
-		setTitle("3205");
 		contentPane = new JPanel();
 		setContentPane(contentPane);
 		
@@ -38,10 +35,10 @@ public class M32052 extends JFrame {
 		});
 		contentPane.setLayout(null);
 		
-		edtPlain = new JTextField();
-		edtPlain.setBounds(134, 149, 409, 90);
-		contentPane.add(edtPlain);
-		edtPlain.setColumns(10);
+		edtStr = new JTextField();
+		edtStr.setBounds(134, 149, 409, 90);
+		contentPane.add(edtStr);
+		edtStr.setColumns(10);
 		
 		edtKey = new JTextField();
 		edtKey.setBounds(134, 293, 417, 29);
@@ -69,36 +66,6 @@ public class M32052 extends JFrame {
 		JButton btnClear = new JButton("\uCD08\uAE30\uD654");
 		btnClear.setBounds(64, 374, 129, 29);
 		contentPane.add(btnClear);
-		
-		JPanel panel = new JPanel();
-		panel.setBounds(0, 0, 10, 10);
-		contentPane.add(panel);
-		
-		btnSingle.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				
-			}
-		});
-		
-		btnMultiple.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				
-			}
-		});
-		
-		btnClear.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				edtPlain.setText(null);
-				edtKey.setText(null);
-				
-			}
-		});
 	}
 	
 	public static void setSingleFrame() {

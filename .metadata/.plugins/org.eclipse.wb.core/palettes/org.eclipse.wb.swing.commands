@@ -7,4 +7,8 @@
 		id="org.eclipse.wb.swing.components javax.swing.JTextField"
 		category="org.eclipse.wb.swing.components"
 		nextEntry="org.eclipse.wb.swing.components javax.swing.JComboBox"/>
+	<moveEntry
+		id="org.eclipse.wb.swing.containers javax.swing.JPanel"
+		category="org.eclipse.wb.swing.containers"
+		nextEntry="org.eclipse.wb.swing.containers javax.swing.JScrollPane"/>
 </commands>
