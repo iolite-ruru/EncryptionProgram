@@ -1,0 +1,24 @@
+package M3205;
+
+import javax.swing.JFrame;
+
+public class M3205 extends JFrame{
+
+	public void setMainFrame() {
+		JFrame frame = new JFrame("3205");
+		
+	}
+	
+	public void setMultipleFrame() {
+		
+	}
+	
+	public void setSingleFrame() {
+		
+	}
+	
+	public static void main(String[] args) {
+		
+	}
+
+}

@@ -1,0 +1,51 @@
+import java.util.Scanner;
+
+public class SingleTest {
+	public static char alphabetBoard[][] = new char[5][5];
+	public static boolean oddFlag = false; //글자수 출력
+	public static String zCheck ="";
+
+	public static void main(String[] args) {
+		String decryption;
+		String encryption;
+		
+		Scanner sc = new Scanner(System.in); 	//입력을 위한 Scanner 정의
+		System.out.print("암호화에 쓰일 키를 입력하세요 : ");
+		String key = sc.nextLine();				//key 입력
+		System.out.print("암호화할 문자열을 입력하세요 : ");
+		String str =  sc.nextLine();				//문자열 입력
+		String blankCheck="";
+		int blankCheckCount=0;
+
+		setBoard(key);							//암호화에 쓰일 암호판 세팅
+		
+		for( int i = 0 ; i < str.length() ; i++ ) 
+		{
+			if(str.charAt(i)==' ') //공백제거
+			{
+				str = str.substring(0,i)+str.substring(i+1,str.length());
+				blankCheck+=10;
+			}
+			else
+			{
+				blankCheck+=0;
+			}
+			if(str.charAt(i)=='z') //z를 q로 바꿔줘서 처리함.
+			{
+				str = str.substring(0,i)+'q'+str.substring(i+1,str.length());
+				zCheck+=1;
+			}
+			else 
+			{
+				zCheck+=0;
+			}
+		}
+		
+		encryption = strEncryption(key, str);
+		
+
+		//출력부분
+		System.out.println("암호화된 문자열 : " + encryption);
+	}
+
+}
