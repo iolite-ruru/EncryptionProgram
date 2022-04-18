@@ -8,7 +8,9 @@ import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JButton;
@@ -16,27 +18,35 @@ import javax.swing.JButton;
 public class SingleSubstitution extends JFrame {
 
 	private JPanel contentPane;
-	//private static char alphabetBoard[][] = new char[2][26];
-	private JTextField edtEncryption;
-	private JTextField edtDecryption;
+	private static Character tableHeader[] = new Character[26];
+	//private static Object tableData[][] = new Object[1][26];
+	private static Character alphabetBoard[][] = new Character[2][26];
+	private JTextArea edtEncryption;
+	private JTextArea edtDecryption;
 	private JTable tablePair;
 	
-	private static char alphabetBoard[] = new char[26];
-	private static char endoingBoard[] = new char[26];
+	//private static char alphabetBoard[] = new char[26];
+	//private static char endoingBoard[] = new char[26];
 	//private static boolean oddFlag = false; //글자수 출력
 	private static String zCheck ="";
 
-	private static String plain;
-	private static String decryption; //복호문
+	private static String plain; //평문
 	private static String encryption; //암호문
-	private static String key;
+	private static String decryption; //복호문
+	private static String key; //암호키
 	
 	private static void initialize() {
-		plain =  "넘어온 값 대입하기";				//문자열 입력
+		encryption = "";
+		decryption = "";
 		String blankCheck="";
 		int blankCheckCount=0;
 		
-		setBoard(key);							//암호화에 쓰일 암호판 세팅
+		setBoard(key);
+		
+		int index = 0;
+		for(char i = 'A'; i<='Z'; i++) {
+			tableHeader[index++] = (Character)i;
+		}
 		
 		for( int i = 0 ; i < plain.length() ; i++ ) {
 			if(plain.charAt(i)==' ') { //공백제거 
@@ -46,7 +56,7 @@ public class SingleSubstitution extends JFrame {
 				blankCheck+=0;
 			}
 			
-			if(plain.charAt(i)=='z') { //z를 q로 바꿔줘서 처리함.
+			if(plain.charAt(i)=='z') { //Z->Q
 				plain = plain.substring(0,i)+'q'+plain.substring(i+1,plain.length());
 				zCheck+=1;
 			} else {
@@ -55,21 +65,37 @@ public class SingleSubstitution extends JFrame {
 		}
 	}
 	
-	private static String strEncryption(String key, String str){
-		String encStr ="";
+	private static void setEncryption(){
 		
-		for(int i=0; i<str.length(); i++) {
+		for(int i=0; i<plain.length(); i++) {
 			for(int j=0; j<26; j++) {
-				//System.out.println(alphabetBoard[0][j]);
-				if(str.charAt(i) == alphabetBoard[j]) { //둘이 같은지를 인식 못하고 있음 => 대소문자 구별
-					encStr += endoingBoard[j];
+				Character temp = new Character(plain.charAt(i));
+				if(Character.compare(temp.charValue(), alphabetBoard[0][j].charValue()) == 0) { //둘이 같은지를 인식 못하고 있음 => 대소문자 구별 //**************************
+					encryption += alphabetBoard[1][j];
 					break;
 				}
 			}
 			//System.out.println("----------");
 		}
-		return encStr;
+		
 	}
+	
+	/*
+	private static void strEncryption(){
+		System.out.println(encryption);
+		for(int i=0; i<plain.length(); i++) {
+			for(int j=0; j<26; j++) {
+				//System.out.println(alphabetBoard[0][j]);
+				if(plain.charAt(i) == alphabetBoard[0][j]) { //둘이 같은지를 인식 못하고 있음 => 대소문자 구별해주자!
+					encryption += alphabetBoard[1][j];
+					break;
+				}
+			}
+			//System.out.println("----------");
+		}
+		System.out.println(encryption);
+	}
+	*/
 
 	private static void setBoard(String key) {
 		String keyForSet = "";					// 중복된 문자가 제거된 문자열을 저장할 문자열.
@@ -79,7 +105,7 @@ public class SingleSubstitution extends JFrame {
 		key += "abcdefghijklmnopqrstuvwxyz"; 	// 키에 모든 알파벳을 추가.
 
 				
-		// 중복처리
+		//중복문자 처리
 		for( int i = 0 ; i < key.length() ; i++ ) {
 			for( int j = 0 ; j < keyForSet.length(); j++ ) { //길이 유동적
 				if(key.charAt(i)==keyForSet.charAt(j)) {
@@ -92,16 +118,16 @@ public class SingleSubstitution extends JFrame {
 			duplicationFlag = false; //다시 false로 설정해줌
 		}
 		
-		//배열에 대입
+		//암호판 셋팅
 		for( int i = 0 ; i < alphabetBoard.length; i++ ) {
-			alphabetBoard[i] = (char)(i + 'a');
-			endoingBoard[i] = keyForSet.charAt(keyLengthCount++);
+			alphabetBoard[0][i] = (char)(i + 'a');
+			alphabetBoard[1][i] = keyForSet.charAt(keyLengthCount++);
 		}
 		
 		System.out.println();
 	}
 
-	public SingleSubstitution() {
+	public SingleSubstitution(String plain, String key) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 800, 600);
 		setLocationRelativeTo(null);
@@ -111,17 +137,17 @@ public class SingleSubstitution extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		edtEncryption = new JTextField();
+		edtEncryption = new JTextArea();
 		edtEncryption.setBounds(112, 208, 562, 103);
 		edtEncryption.setEditable(false);
 		contentPane.add(edtEncryption);
-		edtEncryption.setColumns(10);
+		edtEncryption.setColumns(500);
 		
-		edtDecryption = new JTextField();
+		edtDecryption = new JTextArea();
 		edtDecryption.setBounds(112, 362, 562, 43);
 		edtDecryption.setEditable(false);
 		contentPane.add(edtDecryption);
-		edtDecryption.setColumns(10);
+		edtDecryption.setColumns(500);
 		
 		JLabel lbEncryption = new JLabel("암호문");
 		lbEncryption.setBounds(112, 172, 82, 21);
@@ -143,17 +169,28 @@ public class SingleSubstitution extends JFrame {
 		lbBoard.setBounds(112, 61, 82, 21);
 		contentPane.add(lbBoard);
 		
-		tablePair = new JTable();
-		tablePair.setBounds(112, 97, 551, 60);
-		contentPane.add(tablePair);
-		tablePair.setTableHeader(null);
+		this.plain = plain;
+		this.key = key;
 		
 		initialize();
+		setEncryption();
+		System.out.println(encryption); //nullapppp
+		edtEncryption.setText(encryption);
+		//edtEncryption.setText("aaaaaaaa");
+		
+		
+				
+		DefaultTableModel model = new DefaultTableModel(alphabetBoard, tableHeader);
+		tablePair = new JTable(model);
+		tablePair.setBounds(112, 97, 551, 60);
+		contentPane.add(tablePair);
+		//tablePair.setTableHeader(null);
 		
 		btnDecode.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				//setDecryption()
 				edtDecryption.setText(decryption);
 			}
 		});
@@ -162,7 +199,7 @@ public class SingleSubstitution extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				MainClass subFrame = new MainClass();
+				IntroScreen subFrame = new IntroScreen();
 				subFrame.setVisible(true);
 				dispose();
 			}
