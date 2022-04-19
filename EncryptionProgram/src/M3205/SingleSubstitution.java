@@ -18,22 +18,22 @@ import javax.swing.JButton;
 public class SingleSubstitution extends JFrame {
 
 	private JPanel contentPane;
-	private static Character tableHeader[] = new Character[26];
-	//private static Object tableData[][] = new Object[1][26];
-	private static Character alphabetBoard[][] = new Character[2][26];
-	private JTextArea edtEncryption;
-	private JTextArea edtDecryption;
-	private JTable tablePair;
+	private static String tableHeader[] = new String[26];
+	private static String tableData[][] = new String[1][26];
+	private static char alphabetBoard[][] = new char[2][26];
+	private static JTextArea edtEncryption;
+	private static JTextArea edtDecryption;
+	private static JTable table;
 	
 	//private static char alphabetBoard[] = new char[26];
 	//private static char endoingBoard[] = new char[26];
 	//private static boolean oddFlag = false; //글자수 출력
+	
 	private static String zCheck ="";
-
 	private static String plain; //평문
 	private static String encryption; //암호문
 	private static String decryption; //복호문
-	private static String key; //암호키
+	private static String key;
 	
 	private static void initialize() {
 		encryption = "";
@@ -42,11 +42,6 @@ public class SingleSubstitution extends JFrame {
 		int blankCheckCount=0;
 		
 		setBoard(key);
-		
-		int index = 0;
-		for(char i = 'A'; i<='Z'; i++) {
-			tableHeader[index++] = (Character)i;
-		}
 		
 		for( int i = 0 ; i < plain.length() ; i++ ) {
 			if(plain.charAt(i)==' ') { //공백제거 
@@ -69,8 +64,7 @@ public class SingleSubstitution extends JFrame {
 		
 		for(int i=0; i<plain.length(); i++) {
 			for(int j=0; j<26; j++) {
-				Character temp = new Character(plain.charAt(i));
-				if(Character.compare(temp.charValue(), alphabetBoard[0][j].charValue()) == 0) { //둘이 같은지를 인식 못하고 있음 => 대소문자 구별 //**************************
+				if(plain.charAt(i) == alphabetBoard[0][j]) { //둘이 같은지를 인식 못하고 있음 => 대소문자 구별
 					encryption += alphabetBoard[1][j];
 					break;
 				}
@@ -80,22 +74,18 @@ public class SingleSubstitution extends JFrame {
 		
 	}
 	
-	/*
-	private static void strEncryption(){
-		System.out.println(encryption);
-		for(int i=0; i<plain.length(); i++) {
+	private static void setDecryption(){
+		
+		for(int i=0; i<encryption.length(); i++) {
 			for(int j=0; j<26; j++) {
-				//System.out.println(alphabetBoard[0][j]);
-				if(plain.charAt(i) == alphabetBoard[0][j]) { //둘이 같은지를 인식 못하고 있음 => 대소문자 구별해주자!
-					encryption += alphabetBoard[1][j];
+				if(encryption.charAt(i) == alphabetBoard[1][j]) { //둘이 같은지를 인식 못하고 있음 => 대소문자 구별
+					decryption += alphabetBoard[0][j];
 					break;
 				}
 			}
-			//System.out.println("----------");
 		}
-		System.out.println(encryption);
+		
 	}
-	*/
 
 	private static void setBoard(String key) {
 		String keyForSet = "";					// 중복된 문자가 제거된 문자열을 저장할 문자열.
@@ -103,7 +93,6 @@ public class SingleSubstitution extends JFrame {
 		int keyLengthCount = 0;					// alphabetBoard에 keyForSet을 넣기 위한 count변수.
 		
 		key += "abcdefghijklmnopqrstuvwxyz"; 	// 키에 모든 알파벳을 추가.
-
 				
 		//중복문자 처리
 		for( int i = 0 ; i < key.length() ; i++ ) {
@@ -118,13 +107,13 @@ public class SingleSubstitution extends JFrame {
 			duplicationFlag = false; //다시 false로 설정해줌
 		}
 		
-		//암호판 셋팅
-		for( int i = 0 ; i < alphabetBoard.length; i++ ) {
+		for( int i = 0 ; i < alphabetBoard[0].length; i++ ) {
 			alphabetBoard[0][i] = (char)(i + 'a');
 			alphabetBoard[1][i] = keyForSet.charAt(keyLengthCount++);
+			
+			tableHeader[i] = Character.toString(alphabetBoard[0][i]);
+			tableData[0][i] = Character.toString(alphabetBoard[1][i]);
 		}
-		
-		System.out.println();
 	}
 
 	public SingleSubstitution(String plain, String key) {
@@ -176,21 +165,30 @@ public class SingleSubstitution extends JFrame {
 		setEncryption();
 		System.out.println(encryption); //nullapppp
 		edtEncryption.setText(encryption);
-		//edtEncryption.setText("aaaaaaaa");
 		
+		//DefaultTableModel model = new DefaultTableModel(tableData, tableHeader);
 		
-				
-		DefaultTableModel model = new DefaultTableModel(alphabetBoard, tableHeader);
-		tablePair = new JTable(model);
-		tablePair.setBounds(112, 97, 551, 60);
-		contentPane.add(tablePair);
-		//tablePair.setTableHeader(null);
+		for (int i = 0; i < 26; i++) {
+			tableData[0][i] = Character.toString(alphabetBoard[1][i]);
+		}
+		
+		table = new JTable(new DefaultTableModel(
+			tableData, tableHeader
+//			new String[] {
+//				"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
+//			}
+		));
+		table.setFillsViewportHeight(true);
+		table.setBounds(35, 97, 742, 60);
+		//table.setTableHeader(null);
+		contentPane.add(table);
 		
 		btnDecode.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//setDecryption()
+				setDecryption();
+				System.out.println(decryption);
 				edtDecryption.setText(decryption);
 			}
 		});

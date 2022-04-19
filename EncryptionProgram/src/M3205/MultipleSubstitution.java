@@ -15,6 +15,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
 
 public class MultipleSubstitution extends JFrame {
 
@@ -22,9 +23,9 @@ public class MultipleSubstitution extends JFrame {
 	private JTextField edtEncryption;
 	private JTextField edtDecryption;
 	private JTable tablePair;
-	private JTextField txtA;
-	private JTextField txtB;
 	
+	//private static String tableHeader[] = new String[26];
+	private static String tableData[][] = new String[5][5];
 	private static char alphabetBoard[][] = new char[5][5];
 	private static boolean oddFlag = false; //짝수 홀수 판별
 	private static String zCheck ="";
@@ -33,12 +34,13 @@ public class MultipleSubstitution extends JFrame {
 	private static String encryption; //암호문
 	private static String decryption; //복호문
 	private static String key; //암호키
+	private JTable table;
+	private static String blankCheck="";
+	private static int blankCheckCount=0;
 	
 	private static void initialize() {
 		encryption = "";
 		decryption = "";
-		String blankCheck="";
-		int blankCheckCount=0;
 		
 		setBoard(key);
 		
@@ -47,20 +49,26 @@ public class MultipleSubstitution extends JFrame {
 				plain = plain.substring(0,i)+plain.substring(i+1,plain.length());
 				blankCheck+=10;
 			} else {
-				blankCheck+=0;
+				blankCheck += 0;
 			}
 			
 			if(plain.charAt(i)=='z') { //Z->Q
 				plain = plain.substring(0,i)+'q'+plain.substring(i+1,plain.length());
-				zCheck+=1;
+				zCheck += 1;
 			} else {
-				zCheck+=0;
+				zCheck += 0;
 			}
+		}
+		
+
+
+		for( int i = 0 ; i < encryption.length() ; i++ ) 
+		{
+			if(encryption.charAt(i)==' ') //공백제거
+				encryption = encryption.substring(0,i)+encryption.substring(i+1,encryption.length());
 		}
 	}
 	
-	
-
 	private static void setEncryption(){
 		ArrayList<char[]> playFair = new ArrayList<char[]>();
 		ArrayList<char[]> encPlayFair = new ArrayList<char[]>();
@@ -143,7 +151,106 @@ public class MultipleSubstitution extends JFrame {
 		
 		encryption = encStr;
 	}
+	/*
 	private static void setDecryption() { //*********
+		ArrayList<char[]> beforeFair = new ArrayList<char[]>(); //바꾸기 전 쌍자암호를 저장할 곳
+		ArrayList<char[]> afterFair = new ArrayList<char[]>(); //바꾼 후의 쌍자암호 저장할 곳
+		int x1 = 0 , x2 = 0 , y1 = 0, y2 = 0; //쌍자 암호 두 글자의 각각의 행,열 값
+		String decStr ="";
+
+		int lengthOddFlag = 1;
+		
+		
+		
+		for( int i = 0 ; i < encryption.length() ; i+=2 )
+		{
+			char[] tmpArr = new char[2];
+			tmpArr[0] = encryption.charAt(i);
+			tmpArr[1] = encryption.charAt(i+1); //****
+			beforeFair.add(tmpArr);
+		}
+		
+		
+		for(int i = 0 ; i < beforeFair.size() ; i++ )
+		{
+
+			char[] tmpArr = new char[2];
+			for( int j = 0 ; j < alphabetBoard.length ; j++ )
+			{
+				for( int k = 0 ; k < alphabetBoard[j].length ; k++ )
+				{
+					if(alphabetBoard[j][k] == beforeFair.get(i)[0]) //첫번째 문자에 대해서
+					{
+						x1 = j;
+						y1 = k;
+					}
+					if(alphabetBoard[j][k] == beforeFair.get(i)[1]) //두번째 문자에 대해서
+					{
+						x2 = j;
+						y2 = k;
+					}
+				}
+			}
+			
+			if(x1==x2) //행이 같은 경우 각각 바로 아래열 대입
+			{
+				tmpArr[0] = alphabetBoard[x1][(y1+4)%5];
+				tmpArr[1] = alphabetBoard[x2][(y2+4)%5];
+			}
+			else if(y1==y2) //열이 같은 경우 각각 바로 옆 열 대입
+			{
+				tmpArr[0] = alphabetBoard[(x1+4)%5][y1];
+				tmpArr[1] = alphabetBoard[(x2+4)%5][y2];
+			}
+			else //행, 열 다른경우 각자 대각선에 있는 곳.
+			{
+				tmpArr[0] = alphabetBoard[x2][y1];
+				tmpArr[1] = alphabetBoard[x1][y2];
+			}
+			
+			afterFair.add(tmpArr);
+			
+		}
+		
+		for(int i = 0 ; i < afterFair.size() ; i++) //중복 문자열 돌려놓음
+		{
+			if(i!=afterFair.size()-1 && afterFair.get(i)[1]=='x' 
+					&& afterFair.get(i)[0]==afterFair.get(i+1)[0])
+			{	
+				decStr += afterFair.get(i)[0];
+			}
+			else
+			{
+				decStr += afterFair.get(i)[0]+""+afterFair.get(i)[1];
+			}
+		}
+		
+				
+		for(int i = 0 ; i < zCheck.length() ; i++ )//z위치 찾아서 q로 돌려놓음
+		{
+			if( zCheck.charAt(i) == '1' ) 
+				decStr = decStr.substring(0,i)+'z'+decStr.substring(i+1,decStr.length());
+		}
+
+		
+		if(oddFlag) decStr = decStr.substring(0,decStr.length()-1);
+		
+		
+		 //띄어쓰기
+		for(int i = 0 ; i < decStr.length(); i++)
+		{
+			if(i%2==lengthOddFlag){
+				decStr = decStr.substring(0, i+1)+" "+decStr.substring(i+1, decStr.length());
+				i++;
+				lengthOddFlag = ++lengthOddFlag %2;
+			}
+		}
+		
+		decryption = decStr;
+	}
+	*/
+	
+	private static String setDecryption(String key, String str, String zCheck) {
 		ArrayList<char[]> playFair = new ArrayList<char[]>(); //바꾸기 전 쌍자암호를 저장할 곳
 		ArrayList<char[]> decPlayFair = new ArrayList<char[]>(); //바꾼 후의 쌍자암호 저장할 곳
 		int x1 = 0 , x2 = 0 , y1 = 0, y2 = 0; //쌍자 암호 두 글자의 각각의 행,열 값
@@ -152,11 +259,11 @@ public class MultipleSubstitution extends JFrame {
 		int lengthOddFlag = 1;
 		
 		
-		for( int i = 0 ; i < encryption.length() ; i+=2 )
+		for( int i = 0 ; i < str.length() ; i+=2 )
 		{
 			char[] tmpArr = new char[2];
-			tmpArr[0] = encryption.charAt(i);
-			tmpArr[1] = encryption.charAt(i+1); //****
+			tmpArr[0] = str.charAt(i);
+			tmpArr[1] = str.charAt(i+1);
 			playFair.add(tmpArr);
 		}
 		
@@ -239,15 +346,15 @@ public class MultipleSubstitution extends JFrame {
 			}
 		}
 		*/
-		decryption = decStr;
+		return decStr;
 	}
+	
 	private static void setBoard(String key) {
 		String keyForSet = "";					// 중복된 문자가 제거된 문자열을 저장할 문자열.
 		boolean duplicationFlag = false;		// 문자 중복을 체크하기 위한 flag 변수.
 		int keyLengthCount = 0;					// alphabetBoard에 keyForSet을 넣기 위한 count변수.
 		
 		key += "abcdefghijklmnopqrstuvwxyz"; 	// 키에 모든 알파벳을 추가.
-
 		
 		// 중복처리
 		for( int i = 0 ; i < key.length() ; i++ ) 
@@ -269,9 +376,11 @@ public class MultipleSubstitution extends JFrame {
 			for( int j = 0; j <alphabetBoard[i].length ; j++ )
 			{
 				alphabetBoard[i][j] = keyForSet.charAt(keyLengthCount++);
+				tableData[i][j] = Character.toString(alphabetBoard[i][j]);
 			}
 		}		
-		//배열에 대입
+		//출력
+		
 		for( int i = 0 ; i < alphabetBoard.length ; i++ )
 		{
 			for( int j = 0; j <alphabetBoard[i].length ; j++ )
@@ -280,7 +389,6 @@ public class MultipleSubstitution extends JFrame {
 			}
 			System.out.println();
 		}		
-						
 		
 	}
 	
@@ -295,15 +403,16 @@ public class MultipleSubstitution extends JFrame {
 		contentPane.setLayout(null);
 		
 		edtEncryption = new JTextField();
+		edtEncryption.setEditable(false);
 		edtEncryption.setBounds(112, 208, 562, 103);
 		contentPane.add(edtEncryption);
 		edtEncryption.setColumns(500);
 		
 		edtDecryption = new JTextField();
+		edtDecryption.setEditable(false);
 		edtDecryption.setColumns(500);
 		edtDecryption.setBounds(112, 362, 562, 43);
 		contentPane.add(edtDecryption);
-		//edtDecryption.setColumns(10);
 		
 		JLabel lbEncryption = new JLabel("암호문");
 		lbEncryption.setBounds(112, 172, 82, 21);
@@ -326,16 +435,16 @@ public class MultipleSubstitution extends JFrame {
 		contentPane.add(panel);
 		panel.setLayout(new GridLayout(1, 0, 0, 0));
 		
-		txtA = new JTextField();
-		txtA.setText("A");
-		panel.add(txtA);
-		txtA.setColumns(10);
+		table = new JTable();
+		table.setModel(new DefaultTableModel(
+			tableData,
+			new String[] {
+				"New column", "New column", "New column", "New column", "New column"
+			}
+		));
+		//table.setTableHeader(null);
+		panel.add(table);
 		
-		txtB = new JTextField();
-		txtB.setText("B");
-		panel.add(txtB);
-		txtB.setColumns(10);
-
 		this.plain = plain;
 		this.key = key;
 		
@@ -344,11 +453,24 @@ public class MultipleSubstitution extends JFrame {
 		System.out.println(encryption);
 		edtEncryption.setText(encryption);
 		
+		for( int i = 0 ; i < encryption.length() ; i++ ) 
+		{
+			if(encryption.charAt(i)==' ') //공백제거
+				encryption = encryption.substring(0,i)+encryption.substring(i+1,encryption.length());
+		}
+		
 		btnDecode.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				setDecryption();
+				decryption = setDecryption(key, encryption, zCheck);
+				for( int i = 0 ; i < decryption.length() ; i++)
+				{
+					if(blankCheck.charAt(i)=='1')
+					{
+						decryption = decryption.substring(0,i)+" "+decryption.substring(i,decryption.length());
+					}
+				}
 				System.out.println(decryption);
 				edtDecryption.setText(decryption);
 			}
@@ -364,5 +486,4 @@ public class MultipleSubstitution extends JFrame {
 			}
 		});
 	}
-
 }

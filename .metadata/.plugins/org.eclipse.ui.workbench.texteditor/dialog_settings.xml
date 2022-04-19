@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
-		<item key="selection" value="//&#x09;"/>
+		<item key="selection" value="new String[] {"/>
 		<list key="findhistory">
+			<item value="new String[] {"/>
 			<item value="//&#x09;"/>
 			<item value="&#x09;public static void main(String[] args) {"/>
 			<item value="&#x09;&#x09;&#x09;&#x09;setVisible(false);"/>

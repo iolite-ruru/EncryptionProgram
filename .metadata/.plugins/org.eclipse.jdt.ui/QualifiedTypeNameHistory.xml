@@ -16,4 +16,7 @@
 <fullyQualifiedTypeName name="javax.swing.JFrame"/>
 <fullyQualifiedTypeName name="javax.swing.JTextArea"/>
 <fullyQualifiedTypeName name="java.util.Set"/>
+<fullyQualifiedTypeName name="java.lang.Object"/>
+<fullyQualifiedTypeName name="javax.swing.table.DefaultTableModel"/>
+<fullyQualifiedTypeName name="java.lang.Character"/>
 </qualifiedTypeNameHistroy>

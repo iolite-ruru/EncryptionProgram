@@ -8,3 +8,6 @@
 1650170191146	Rename local variable 'str'
 1650170420670	Rename local variable 'str'
 1650170491661	Rename method 'strDecryption'
+1650262027344	Rename field 'tablePair'
+1650344957059	Rename local variable 'playFair'
+1650344969172	Rename local variable 'decPlayFair'
