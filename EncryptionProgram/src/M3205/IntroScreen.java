@@ -66,7 +66,7 @@ public class IntroScreen extends JFrame {
 		contentPane.setLayout(null);
 		setContentPane(contentPane);
 		
-		JButton btnSingle = new JButton("단일치환");
+		JButton btnSingle = new JButton("시저치환");
 		btnSingle.setFont(new Font("D2Coding", Font.PLAIN, 18));
 		btnSingle.setBounds(426, 468, 140, 29);
 		btnSingle.addActionListener(new ActionListener() {

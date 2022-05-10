@@ -149,7 +149,7 @@ public class SingleSubstitution extends JFrame {
 		contentPane.add(edtDecryption);
 		edtDecryption.setColumns(500);
 		
-		JLabel lbTitle = new JLabel("단일치환");
+		JLabel lbTitle = new JLabel("시저치환");
 		lbTitle.setFont(new Font("D2Coding", Font.BOLD, 30));
 		lbTitle.setBounds(329, 25, 129, 86);
 		contentPane.add(lbTitle);
